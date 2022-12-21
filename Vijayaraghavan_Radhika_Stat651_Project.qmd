@@ -1,0 +1,106 @@
+---
+title: |
+  | \LARGE \textbf{STATEBINS PROJECT}
+  |
+  | by
+  |
+  | Radhika Vijayaraghavan(Section 1)
+  | netID# zg4894
+  |
+  | Instructor: Dr.Eric Suess
+  |
+  | STAT 651, California State University East Bay
+  |
+  | Fall 2022
+format: pdf
+header-includes:
+   - \usepackage{sectsty}
+   - \allsectionsfont{\color{blue}}
+   - \usepackage{titling}
+#   - \sectionfont{\large} 
+   - \usepackage{titlesec}
+   - \pretitle{\begin{center}\LARGE\includegraphics[width=14cm]{csueb logo.jpeg}\\[\bigskipamount]}
+   - \posttitle{\end{center}}
+---
+
+```{r}
+#| echo: false
+#| include: false
+library(pacman)
+p_load("tidyverse", "scales", "readr", "statebins", "janitor")
+```
+
+```{r}
+#| echo: false
+#| include: false
+options(readr.show_col_types = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+```
+
+------------------------------------------------------------------------
+
+# State Bin 1
+
+```{r}
+Home_Ownership_Rate <- read_csv("home_ownership_rate_2019_2022.csv") %>% 
+  clean_names() %>% 
+  rename("Year_2019" = "x1_1_19", 
+         "Year_2020" = "x1_1_20", 
+         "Year_2021" = "x1_1_21")
+```
+
+```{r}
+#| warning: false
+#| #| message: false
+Home_Ownership_Rate <- Home_Ownership_Rate %>%
+  mutate(share = cut(Year_2021, 
+                     breaks = c(-77,64,67.2,69.3,73,79))
+         ) %>% 
+  select(region_name, region_code, Year_2021, share)
+
+head(Home_Ownership_Rate)
+```
+
+```{r}
+statebins(state_data = Home_Ownership_Rate,
+          state_col = "region_name",
+          value_col = "share", 
+          direction = 1,
+          ggplot2_scale_function = scale_fill_brewer
+          ) +
+  theme_statebins(legend_position="right") +
+  labs(title = "2021 Home Ownership rate by state") +
+  scale_fill_brewer(palette = "PuBuGn", name = "Home Ownership Rate:\n(in %)",
+                    labels = c(expression("" <= 64),expression("" <= 67.2),
+                               expression("" <= 69.3),expression("" <= 73),
+                               expression("" <= 79))) +
+    theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+------------------------------------------------------------------------
+
+# State Bin 2
+
+```{r}
+Avg_Hourly_Earnings <- read_csv("Average Hourly Earnings of employees.csv") %>%
+  rename("state" = "Region Name",
+         "region_code" = "Region Code") %>% 
+  select(state, region_code, Oct)
+
+head(Avg_Hourly_Earnings)
+```
+
+```{r}
+statebins(state_data = Avg_Hourly_Earnings,
+                                  state_col = "state",
+                                  value_col = "Oct",
+                                  name = "Avg Hourly Earnings:\n(in dollars per hour)",
+                                  palette = "PuRd",
+                                  direction = 1
+          ) +
+  theme_statebins(legend_position="right") +
+  labs(title = "Avg Hourly Earnings by state, Oct 2022") +
+  theme(plot.title = element_text(hjust = 0.5))
+  
+```
