@@ -4,12 +4,12 @@ title: |
   |
   | by
   |
-  | Radhika Vijayaraghavan(Section 1)
-  | netID# zg4894
+  | xxx
+  | xxx
   |
-  | Instructor: Dr.Eric Suess
+  | xxx
   |
-  | STAT 651, California State University East Bay
+  | California State University East Bay
   |
   | Fall 2022
 format: pdf
